@@ -1,19 +1,44 @@
-import Fastify from 'fastify'
-import postgres from '@fastify/postgres'
-import autoload from '@fastify/autoload'
-import dotenv from 'dotenv'
-import { join } from 'path'
+import Fastify, { FastifyInstance } from 'fastify';
+import postgres from '@fastify/postgres';
+import autoload from '@fastify/autoload';
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
 
-dotenv.config()
+// Load environment variables
+dotenv.config();
 
-const server = Fastify({ logger: true })
+// Initialize Fastify with TypeBox
+const fastify: FastifyInstance = Fastify({
+  logger: true,
+}).withTypeProvider<TypeBoxTypeProvider>();
 
-server.register(postgres, { connectionString: process.env.DATABASE_URL })
-server.register(autoload, { dir: join(__dirname, 'routes'), options: { prefix: '/api' } })
+// Register PostgreSQL plugin
+fastify.register(postgres, {
+  connectionString: process.env.DATABASE_URL,
+});
 
-server.listen({ port: +(process.env.PORT || 3000), host: '0.0.0.0' })
-  .then(() => server.log.info(`Server running 🚀 http://0.0.0.0:${process.env.PORT || '3000'}`))
-  .catch(err => {
-    server.log.error(err)
-    process.exit(1)
-  })
+// Add health check route
+fastify.get('/health', async (_request, reply) => {
+  return { status: 'ok' };
+});
+
+// Register autoload for plugins
+fastify.register(autoload, {
+  dir: join(__dirname, '../dist/routes'),
+  options: { prefix: '/api' },
+  ignorePattern: /.*\.ts$/,
+});
+
+// Start server
+const start = async () => {
+  try {
+    await fastify.listen({ port: parseInt(process.env.PORT || '3000'), host: '0.0.0.0' });
+    fastify.log.info(`Server running on http://0.0.0.0:${process.env.PORT || '3000'}`);
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+};
+
+start();
