@@ -1,37 +1,29 @@
 {
   "name": "menucipher-backend",
   "version": "1.0.0",
-  "description": "Fastify TypeScript backend for MenuCipher with PostgreSQL and bcrypt",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "test": "node --test test/**/*.test.js"
-  },
-  "engines": {
-    "node": "18.x",
-    "npm": ">=8.0.0"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
-    "@fastify/autoload": "^6.3.0",
     "@fastify/postgres": "^6.0.2",
-    "@fastify/type-provider-typebox": "^5.1.0",
-    "@sinclair/typebox": "^0.34.33",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.5.0",
     "fastify": "^5.3.2",
-    "find-my-way": "^8.2.0",
-    "pg": "^8.15.6"
+    "fastify-postgres": "^3.6.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "^22.15.2",
+    "@types/node": "^22.15.3",
     "@types/pg": "^8.11.14",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
 }

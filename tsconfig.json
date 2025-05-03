@@ -1,13 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node"
-  }
-}
-
+    "compilerOptions": {
+      "target": "ES2020",
+      "module": "CommonJS",
+      "esModuleInterop": true,
+      "strict": true,
+      "outDir": "./dist",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "baseUrl": ".",
+      "paths": {
+        "*": ["src/*"]
+      }
+    },
+    "include": ["src"]
+  }  
