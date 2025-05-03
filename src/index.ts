@@ -1,4 +1,3 @@
-// src/index.ts
 import Fastify from 'fastify'
 import dotenv from 'dotenv'
 import fastifyPostgres from '@fastify/postgres'
@@ -10,6 +9,11 @@ const fastify = Fastify({ logger: true })
 
 fastify.register(fastifyPostgres, {
   connectionString: process.env.DATABASE_URL
+})
+
+// Health check route
+fastify.get('/health', async (request, reply) => {
+  return { status: 'ok' }
 })
 
 fastify.register(clientsPlugin, { prefix: '/api/clients' })
