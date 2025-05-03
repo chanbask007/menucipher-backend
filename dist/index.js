@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// src/index.ts
 const fastify_1 = __importDefault(require("fastify"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const postgres_1 = __importDefault(require("@fastify/postgres"));
@@ -12,6 +11,10 @@ dotenv_1.default.config();
 const fastify = (0, fastify_1.default)({ logger: true });
 fastify.register(postgres_1.default, {
     connectionString: process.env.DATABASE_URL
+});
+// Health check route
+fastify.get('/health', async (request, reply) => {
+    return { status: 'ok' };
 });
 fastify.register(clients_1.default, { prefix: '/api/clients' });
 const start = async () => {
