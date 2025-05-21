@@ -20,7 +20,7 @@ fastify.register(clients_1.default, { prefix: '/api/clients' });
 const start = async () => {
     try {
         await fastify.listen({ port: Number(process.env.PORT) || 3000, host: '0.0.0.0' });
-        console.log(`Server running on http://localhost:${process.env.PORT}`);
+        console.log(`Server running on port ${process.env.PORT || 3000}`);
     }
     catch (err) {
         fastify.log.error(err);
