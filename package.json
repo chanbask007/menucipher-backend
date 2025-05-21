@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "^22.15.3",
-    "@types/pg": "^8.11.14",
+    "@types/node": "^22.15.21",
+    "@types/pg": "^8.15.2",
     "tsx": "^4.19.4"
   }
 }
