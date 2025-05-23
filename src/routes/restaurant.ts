@@ -1,7 +1,18 @@
 // src/routes/restaurant.ts
 import type { FastifyPluginAsync } from 'fastify';
-import { Restaurant } from '../types';
+import { Restaurant, Currency } from '../types';
 import { authMiddleware } from '../middleware/auth';
+
+const currencySymbols: Record<Currency, string> = {
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  JPY: '¥',
+  CAD: '$',
+  AUD: '$',
+  INR: '₹',
+  CNY: '¥'
+};
 
 const restaurantPlugin: FastifyPluginAsync = async (fastify) => {
   fastify.addHook('preHandler', authMiddleware);
@@ -25,9 +36,7 @@ const restaurantPlugin: FastifyPluginAsync = async (fastify) => {
         address: client.address,
         hours: `${client.open_at} - ${client.closed_at}`,
         currency: client.currency,
-        currencySymbol: { USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: '$', AUD: '$', INR: '₹', CNY: '¥' }[
-          client.currency
-        ] || '$'
+        currencySymbol: currencySymbols[client.currency as Currency] || '$'
       };
       return restaurant;
     } catch (err) {
@@ -62,9 +71,7 @@ const restaurantPlugin: FastifyPluginAsync = async (fastify) => {
         address: updatedClient.address,
         hours: `${updatedClient.open_at} - ${updatedClient.closed_at}`,
         currency: updatedClient.currency,
-        currencySymbol: { USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: '$', AUD: '$', INR: '₹', CNY: '¥' }[
-          updatedClient.currency
-        ] || '$'
+        currencySymbol: currencySymbols[updatedClient.currency as Currency] || '$'
       };
       return { message: 'Restaurant updated', restaurant };
     } catch (err) {

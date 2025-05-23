@@ -1,4 +1,7 @@
 // src/types/index.ts
+
+export type Currency = 'USD' | 'EUR' | 'GBP' | 'JPY' | 'CAD' | 'AUD' | 'INR' | 'CNY';
+
 export interface Client {
     client_id: string;
     name: string;

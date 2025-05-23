@@ -15,7 +15,7 @@ const menuItemsPlugin: FastifyPluginAsync = async (fastify) => {
 
       try {
         let query = 'SELECT * FROM menu_items WHERE client_id = $1';
-        const params: (string | number)[] = [clientId];
+        const params: (string | number | boolean)[] = [clientId];
         let paramIndex = 2;
 
         if (categoryId) {

@@ -11,7 +11,7 @@ export const authMiddleware = async (req: FastifyRequest, reply: FastifyReply) =
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret_here') as { email: string };
-    req.user = { email: decoded.email };
+    req.user = { email: decoded.email }; // Now TypeScript knows about req.user
   } catch (err) {
     req.log.error(err);
     return reply.code(401).send({ error: 'Invalid token' });
