@@ -1,5 +1,6 @@
 import Fastify from 'fastify'
 import dotenv from 'dotenv'
+import cors from '@fastify/cors';
 import fastifyPostgres from '@fastify/postgres'
 import clientsPlugin from './routes/clients'
 
@@ -14,9 +15,19 @@ dotenv.config()
 
 const fastify = Fastify({ logger: true })
 
+// Enable CORS
+fastify.register(cors, {
+  origin: 'http://localhost:5173', // Allow requests from the frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+  credentials: true, // Allow cookies or auth headers if needed
+});
+
 fastify.register(fastifyPostgres, {
   connectionString: process.env.DATABASE_URL
 })
+
+
 
 // Health check route
 fastify.get('/health', async (request, reply) => {
