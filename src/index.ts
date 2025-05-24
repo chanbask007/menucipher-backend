@@ -17,7 +17,7 @@ const fastify = Fastify({ logger: true })
 
 // Enable CORS
 fastify.register(cors, {
-  origin: 'http://localhost:5173', // Allow requests from the frontend origin
+  origin: true, // Allow requests from the frontend origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
   credentials: true, // Allow cookies or auth headers if needed
