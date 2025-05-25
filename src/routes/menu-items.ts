@@ -49,6 +49,20 @@ const menuItemsPlugin: FastifyPluginAsync = async (fastify) => {
       }
 
       try {
+        // Check if a menu item with the same name already exists for this client
+        const { rows: existingMenuItems } = await fastify.pg.query<MenuItem>(
+          'SELECT * FROM menu_items WHERE client_id = $1 AND name = $2',
+          [clientId, name]
+          // For case-insensitive validation, use:
+          // 'SELECT * FROM menu_items WHERE client_id = $1 AND LOWER(name) = LOWER($2)',
+          // [clientId, name.toLowerCase()]
+        );
+
+        if (existingMenuItems.length > 0) {
+          return reply.code(400).send({ error: 'Menu item already exists for this client' });
+        }
+
+        // Proceed with menu item creation if no duplicate is found
         const { rows } = await fastify.pg.query<MenuItem>(
           `
           INSERT INTO menu_items (client_id, category, name, description, price, image_url, create_at, popular, rating)

@@ -35,6 +35,17 @@ const categoriesPlugin: FastifyPluginAsync = async (fastify) => {
       }
 
       try {
+        // Check if a category with the same name already exists for this client
+        const { rows: existingCategories } = await fastify.pg.query<Category>(
+          'SELECT * FROM categories WHERE client_id = $1 AND name = $2',
+          [clientId, name]
+        );
+
+        if (existingCategories.length > 0) {
+          return reply.code(400).send({ error: 'Category already exists for this client' });
+        }
+
+        // Proceed with category creation if no duplicate is found
         const { rows } = await fastify.pg.query<Category>(
           'INSERT INTO categories (client_id, name) VALUES ($1, $2) RETURNING *',
           [clientId, name]
