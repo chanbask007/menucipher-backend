@@ -42,11 +42,13 @@ export interface Client {
   }
   
   export interface Restaurant {
+    restaurant_id: string;
     name: string;
     address: string;
     hours: string;
     currency: string;
     currencySymbol: string;
+    
   }
   
   export interface DashboardResponse {

@@ -23,7 +23,7 @@ const restaurantPlugin: FastifyPluginAsync = async (fastify) => {
 
     try {
       const { rows } = await fastify.pg.query(
-        'SELECT name, address, open_at, closed_at, currency FROM clients WHERE client_id = $1',
+        'SELECT client_id, name, address, open_at, closed_at, currency FROM clients WHERE client_id = $1',
         [clientId]
       );
       if (!rows.length) {
@@ -32,6 +32,7 @@ const restaurantPlugin: FastifyPluginAsync = async (fastify) => {
 
       const client = rows[0];
       const restaurant: Restaurant = {
+        restaurant_id: client.client_id,
         name: client.name,
         address: client.address,
         hours: `${client.open_at} - ${client.closed_at}`,
@@ -57,7 +58,7 @@ const restaurantPlugin: FastifyPluginAsync = async (fastify) => {
         UPDATE clients
         SET name = $1, address = $2, open_at = $3, closed_at = $4, currency = $5
         WHERE client_id = $6
-        RETURNING name, address, open_at, closed_at, currency
+        RETURNING client_id, name, address, open_at, closed_at, currency
       `,
         [name, address, open_at, closed_at, currency, clientId]
       );
@@ -67,6 +68,7 @@ const restaurantPlugin: FastifyPluginAsync = async (fastify) => {
 
       const updatedClient = rows[0];
       const restaurant: Restaurant = {
+        restaurant_id: updatedClient.client_id,
         name: updatedClient.name,
         address: updatedClient.address,
         hours: `${updatedClient.open_at} - ${updatedClient.closed_at}`,

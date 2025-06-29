@@ -22,6 +22,7 @@ const dashboardPlugin: FastifyPluginAsync = async (fastify) => {
 
       const client = clientRows[0];
       const restaurant: Restaurant = {
+        restaurant_id: client.client_id,
         name: client.name,
         address: client.address,
         hours: `${client.open_at} - ${client.closed_at}`,
