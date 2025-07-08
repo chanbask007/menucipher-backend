@@ -17,17 +17,17 @@ const menuItemsPlugin: FastifyPluginAsync = async (fastify) => {
     async (req, reply) => {
       const { clientId } = req.params;
       const { categoryId, popular } = req.query;
-
+  
       try {
         let query = `
           SELECT mi.*, c.name AS category
           FROM menu_items mi
-          JOIN categories c ON mi.category_id = c.category_id
+          JOIN categories c ON mi.category_id = c.id
           WHERE mi.client_id = $1
         `;
         const params: (string | number | boolean)[] = [clientId];
         let paramIndex = 2;
-
+  
         if (categoryId) {
           query += ` AND mi.category_id = $${paramIndex}`;
           params.push(parseInt(categoryId, 10)); // Convert to integer
@@ -37,7 +37,7 @@ const menuItemsPlugin: FastifyPluginAsync = async (fastify) => {
           query += ` AND mi.popular = $${paramIndex}`;
           params.push(true);
         }
-
+  
         const { rows } = await fastify.pg.query<MenuItem>(query, params);
         return rows;
       } catch (err) {
